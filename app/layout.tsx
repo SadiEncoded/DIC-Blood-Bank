@@ -15,8 +15,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DIC Blood Bank",
-  description: "A blood bank management system for DIC",
+  description: "A community-driven blood bank management system for DIC",
+  keywords: [
+    "DIC",
+    "Blood Bank",
+    "Donors",
+    "Blood Donation",
+    "Chandpur",
+    "Daffodil",
+    "Daffodil Family",
+    "DIU",
+    "Mahmudul Hasan Sadi"
+  ],
+  authors: [{ name: "Mahmudul Hasan Sadi" }],
+  themeColor: "#00234B",
 };
+
 
 export default function RootLayout({
   children,
@@ -24,36 +38,44 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.png" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${geistSans.variable} ${geistMono.variable} antialiased
+          bg-gray-50 text-gray-800 selection:bg-red-600 selection:text-white
+        `}
       >
+        {/* Global Toaster */}
         <Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{
             duration: 5000,
             style: {
-              background: "#363636",
-              color: "#fff",
+              background: "#1E293B",
+              color: "#F1F5F9",
+              borderRadius: "0.5rem",
+              padding: "1rem 1.25rem",
+              fontWeight: 500,
+              boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
             },
             success: {
               duration: 3000,
-              iconTheme: {
-                primary: "#21FF76",
-                secondary: "#fff",
-              },
+              iconTheme: { primary: "#22C55E", secondary: "#fff" },
             },
             error: {
-              duration: 3000,
-              iconTheme: {
-                primary: "#ff4b4b",
-                secondary: "#fff",
-              },
+              duration: 4000,
+              iconTheme: { primary: "#EF4444", secondary: "#fff" },
             },
           }}
         />
-        {children}
+
+        <main className="min-h-screen flex flex-col">
+          {children}
+        </main>
       </body>
     </html>
   );

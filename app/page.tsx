@@ -1,10 +1,8 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
-import BloodGroups from './components/BloodGroup';
 import Footer from './components/Footer';
-
-
+import DonorMap from './components/DonorMap';
 
 export default function Home() {
   return (
@@ -12,7 +10,7 @@ export default function Home() {
       <Header />
       <Hero />
       <Stats />
-      <BloodGroups />
+      <DonorMap />
       <Footer />
     </div>
   );

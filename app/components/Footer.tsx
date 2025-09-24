@@ -1,63 +1,111 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
+
 export default function Footer() {
+  const socialLinks = [
+    { icon: Mail, href: '#' },
+    { icon: Twitter, href: '#' },
+    { icon: Linkedin, href: '#' },
+    { icon: Github, href: '#' },
+  ];
+
   return (
-    <footer className="bg-[#00234B] text-white mt-auto">
-      <div className="max-w-6xl mx-auto py-12 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Contact */}
-          <div className="text-center md:text-left">
-            <h3 className="text-xl font-semibold mb-6">Contact Us</h3>
-            <motion.div whileHover={{ x: 5 }} className="flex flex-col space-y-3">
-              <Link href="tel:+8801681279979" className="text-gray-300 hover:text-white transition-colors flex items-center justify-center md:justify-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#D60A0A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                +880 1681-279979
-              </Link>
-              <Link href="mailto:daffodil.cse24@gmail.com" className="text-gray-300 hover:text-white transition-colors flex items-center justify-center md:justify-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#D60A0A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                daffodil.cse24@gmail.com
-              </Link>
-            </motion.div>
-          </div>
+    <footer className="relative bg-gradient-to-t from-[#001F3B] via-[#002B55] to-[#003366] text-white overflow-hidden">
+      {/* Floating shapes */}
+      <motion.div
+        className="absolute -top-32 -left-32 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl"
+        animate={{ y: [0, 15, 0], x: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 18, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute -bottom-36 -right-36 w-[24rem] h-[24rem] bg-teal-400/10 rounded-full blur-3xl"
+        animate={{ y: [0, -15, 0], x: [0, -10, 0] }}
+        transition={{ repeat: Infinity, duration: 20, ease: 'easeInOut' }}
+      />
 
-          {/* Quick Links */}
-          <div className="text-center">
-            <h3 className="text-xl font-semibold mb-6">Quick Links</h3>
-            <div className="flex flex-col space-y-3">
-              <Link href="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 inline-block">About</Link>
-              <Link href="/donate" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 inline-block">Donate</Link>
-              <Link href="/contact" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 inline-block">Contact</Link>
+      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-16">
+
+        {/* Brand Section */}
+        <div className="space-y-4">
+          <h3 className="text-2xl md:text-3xl font-bold text-yellow-400">DIC Blood Bank</h3>
+          <p className="text-gray-300 text-sm md:text-base max-w-sm bg-white/5 p-4 rounded-xl">
+            A community-driven platform connecting donors and recipients to save lives.
+          </p>
+          <div className="flex gap-4 mt-3">
+            {socialLinks.map((link, idx) => {
+              const Icon = link.icon;
+              return (
+                <motion.a
+                  key={idx}
+                  href={link.href}
+                  target="_blank"
+                  whileHover={{ scale: 1.2, color: '#FFD700', transition: { duration: 0.3 } }}
+                  className="text-gray-300"
+                >
+                  <Icon className="w-5 h-5" />
+                </motion.a>
+              );
+            })}
+          </div>
+        </div>
+
+{/* Quick Links */}
+<div className="space-y-2">
+  <h4 className="text-lg font-semibold text-yellow-400 mb-2">Quick Links</h4>
+  <ul className="space-y-2 text-gray-300">
+    <li>
+      <Link href="/" className="hover:text-white transition underline-offset-2 hover:underline">
+        Home
+      </Link>
+    </li>
+    <li>
+      <Link href="/donors" className="hover:text-white transition underline-offset-2 hover:underline">
+        Find Donors
+      </Link>
+    </li>
+    <li>
+      <Link href="/register" className="hover:text-white transition underline-offset-2 hover:underline">
+        Register
+      </Link>
+    </li>
+    <li>
+      <Link href="/about" className="hover:text-white transition underline-offset-2 hover:underline">
+        About
+      </Link>
+    </li>
+  </ul>
+</div>
+
+
+        {/* Created By */}
+        <div className="flex flex-col items-center md:items-end gap-4">
+          <p className="text-gray-400 uppercase tracking-wide text-sm">Created by</p>
+          <motion.div
+            whileHover={{ scale: 1.05, boxShadow: '0px 15px 25px rgba(255,215,0,0.3)' }}
+            className="flex items-center gap-3 cursor-pointer transition-shadow duration-300 bg-white/5 p-2 rounded-xl"
+          >
+            <Image
+              src="/sadi.png"
+              alt="Mahmudul Hasan Sadi"
+              width={60}
+              height={60}
+              className="rounded-full border-2 border-yellow-400"
+            />
+            <div className="flex flex-col">
+              <p className="font-semibold text-white text-lg">Mahmudul Hasan Sadi</p>
+              <p className="text-gray-300 text-sm">Frontend Developer</p>
             </div>
-          </div>
-
-          {/* Location */}
-          <div className="text-center md:text-right">
-            <h3 className="text-xl font-semibold mb-6">Location</h3>
-            <motion.div whileHover={{ x: -5 }} className="text-gray-300 space-y-3">
-              <p className="flex items-center justify-center md:justify-end">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:ml-2 mr-2 text-[#D60A0A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Daffodil International College
-              </p>
-              <p className="flex items-center justify-center md:justify-end">
-                <span className="md:ml-7">Baburhat, Chandpur</span>
-              </p>
-            </motion.div>
-          </div>
+          </motion.div>
+          <p className="text-gray-400 text-xs mt-4">
+            © {new Date().getFullYear()} DIC Blood Bank. All rights reserved.
+          </p>
         </div>
 
-        <div className="border-t border-gray-700/50 mt-12 pt-8 text-center text-sm text-gray-400">
-          © 2025 DIC Blood Bank | Created By Mahmudul Hasan Sadi
-        </div>
       </div>
     </footer>
   );

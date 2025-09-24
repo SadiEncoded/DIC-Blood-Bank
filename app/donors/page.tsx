@@ -1,206 +1,197 @@
-"use client";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+'use client';
+
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Search } from 'lucide-react';
+import Image from 'next/image';
+import DonorCard from '../components/DonorCard';
+
+const Header = dynamic(() => import('../components/Header'), { ssr: false });
+const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
 
 interface Donor {
-  name: string;
+  id: string;
+  fullName: string;
   bloodGroup: string;
   phone: string;
-  age: string;
+  dob: string;
   gender: string;
   lastDonation: string;
-  city: string;
+  address: string;
+  weight: string;
+  notes: string;
+  status: string;
+  badges?: string[];
+  avatarUrl?: string;
 }
 
 export default function Donors() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState({
-    bloodGroup: "",
-    searchQuery: "",
-  });
-
-  const bloodGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
+    const fetchDonors = async () => {
+      try {
+        const q = query(collection(db, 'donors'), where('status', '==', 'active'));
+        const snapshot = await getDocs(q);
+        const donorList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Donor[];
+        setDonors(donorList);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load donors. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchDonors();
   }, []);
 
-  const fetchDonors = async () => {
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycby3KkU_WeB6Y0OZKKUAnYEsKjI91UKhelDcztCRbFVTWwlmy29_Rr1WDjUvsheTTgrlzg/exec");
-      if (!response.ok) throw new Error("Failed to fetch donors");
-      
-      const data = await response.json();
-      // Assuming the data is an array of arrays, convert it to array of objects
-      const formattedData = data.slice(1).map((row: (string | null)[]) => ({
-        name: row[0] || "",
-        bloodGroup: row[1] || "",
-        phone: row[2] || "",
-        age: row[3] || "",
-        gender: row[4] || "",
-        lastDonation: row[5] || "",
-        city: row[6] || "Chandpur"
-      }));
-      
-      setDonors(formattedData);
-    } catch {
-      setError("Failed to load donors. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
-  const filteredDonors = donors.filter((donor) => {
-    const matchesBloodGroup = filter.bloodGroup ? donor.bloodGroup === filter.bloodGroup : true;
-    const matchesSearch = filter.searchQuery
-      ? donor.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-        donor.city.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  const filteredDonors = donors.filter(donor => {
+    const matchesGroup = selectedGroup ? donor.bloodGroup?.toUpperCase() === selectedGroup.toUpperCase() : true;
+    const matchesSearch = searchTerm
+      ? donor.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        donor.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        donor.bloodGroup.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
-    return matchesBloodGroup && matchesSearch;
+    return matchesGroup && matchesSearch;
   });
 
+  const clearAllFilters = () => {
+    setSelectedGroup(null);
+    setSearchTerm('');
+  };
+
+  const topDonor = donors.length > 0 ? donors[0] : null;
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-3xl font-bold text-[#00234B] mb-4">Find Blood Donors</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Search through our database of registered blood donors. Connect with donors 
-            and help save lives.
-          </p>
-        </motion.div>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Header />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search by name or city..."
-              value={filter.searchQuery}
-              onChange={(e) => setFilter(prev => ({ ...prev, searchQuery: e.target.value }))}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D60A0A] focus:border-transparent"
-            />
-            <svg
-              className="absolute right-3 top-3.5 h-5 w-5 text-gray-400"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
+      <section className="py-16 bg-gradient-to-b from-[#f0f8ff] to-white relative">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 px-4">
 
-          <select
-            value={filter.bloodGroup}
-            onChange={(e) => setFilter(prev => ({ ...prev, bloodGroup: e.target.value }))}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D60A0A] focus:border-transparent"
-          >
-            <option value="">All Blood Groups</option>
-            {bloodGroups.map((group) => (
-              <option key={group} value={group}>
-                {group}
-              </option>
-            ))}
-          </select>
-        </motion.div>
+          {/* Top Donor */}
+<aside className="lg:col-span-1">
+  <h2 className="text-xl font-bold text-[#00234B] mb-4">Top Donor</h2>
+  {topDonor ? (
+    <div className="w-full max-w-xs mx-auto"> {/* fixed width to match search results */}
+      <DonorCard donor={topDonor} highlight /> {/* highlight now only adds border/shadow */}
+    </div>
+  ) : (
+    <p className="text-gray-400">No top donor available.</p>
+  )}
+</aside>
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#D60A0A] border-t-transparent"></div>
-          </div>
-        ) : error ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center text-red-600 py-12"
-          >
-            {error}
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
-          >
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-[#00234B]">
-                  <tr>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">Name</th>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">Blood Group</th>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">Age/Gender</th>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">Last Donation</th>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">City</th>
-                    <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-white">Contact</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredDonors.map((donor, index) => (
-                    <motion.tr
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="hover:bg-gray-50"
+          {/* Main Content */}
+          <main className="lg:col-span-3">
+            {/* Search Section */}
+            <div className="text-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-[#00234B] mb-2">
+                Find Blood Donors
+              </h1>
+              <p className="text-gray-600 text-lg mb-6">
+                Find Blood by Blood Type, Location or Name. Always respect donors for their contribution.
+              </p>
+
+              <div className="bg-white shadow-md rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <Search className="w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by Blood Type, Location, or Name..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="flex-grow outline-none px-2 py-2 rounded-md text-gray-700"
+                  />
+                  <button
+                    onClick={() => setShowFilters(true)}
+                    className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                  >
+                    All Filters
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-2">
+                  {bloodGroups.map(group => (
+                    <button
+                      key={group}
+                      onClick={() => setSelectedGroup(selectedGroup === group ? null : group)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                        selectedGroup === group
+                          ? 'bg-[#D60A0A] text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{donor.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1 text-sm font-medium bg-red-100 text-[#D60A0A] rounded-full">
-                          {donor.bloodGroup}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {donor.age} / {donor.gender}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {donor.lastDonation ? new Date(donor.lastDonation).toLocaleDateString() : 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{donor.city}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <motion.a
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          href={`https://wa.me/${donor.phone}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                          </svg>
-                          Contact
-                        </motion.a>
-                      </td>
-                    </motion.tr>
+                      {group}
+                    </button>
                   ))}
-                </tbody>
-              </table>
+                  {(selectedGroup || searchTerm) && (
+                    <button
+                      onClick={clearAllFilters}
+                      className="px-4 py-2 rounded-full bg-gray-200 text-gray-600 text-sm"
+                    >
+                      Clear All Filters
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-            
-            {filteredDonors.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
-                No donors found matching your criteria.
+
+            {/* Additional Filters */}
+            {showFilters && (
+              <div className="bg-white shadow-lg rounded-2xl p-6 max-w-lg mx-auto mb-6">
+                <h3 className="text-lg font-bold mb-3">Additional Filters</h3>
+                <p className="text-sm text-gray-500 mb-4">Coming soon: filter by last donation, age range, availability, etc.</p>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm"
+                >
+                  Close
+                </button>
               </div>
             )}
-          </motion.div>
-        )}
-      </div>
+
+            {/* Donor Results */}
+            {loading ? (
+              <p className="text-center text-gray-400">Loading donors...</p>
+            ) : error ? (
+              <p className="text-center text-red-400">{error}</p>
+            ) : searchTerm || selectedGroup ? (
+              filteredDonors.length === 0 ? (
+                <p className="text-center text-gray-400">No donors found.</p>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredDonors.map((donor, i) => (
+                    <DonorCard key={donor.id} donor={donor} delay={i * 0.05} />
+                  ))}
+                </div>
+              )
+            ) : (
+              <div className="text-center text-gray-500 mt-20">
+                <Image
+                  src="/bldpic.jpg"
+                  alt="Donate blood"
+                  width={288}
+                  height={288}
+                  className="mx-auto mb-8 opacity-30"
+                />
+                <h3 className="text-2xl font-semibold mb-3">Search for donors to see results</h3>
+                <p className="text-gray-600">Use filters or search by name/location to find donors.</p>
+              </div>
+            )}
+          </main>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

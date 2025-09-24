@@ -1,7 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Header and Footer with SSR disabled
+const Header = dynamic(() => import('../components/Header'), { ssr: false });
+const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,26 +24,25 @@ export default function Contact() {
     setSubmitStatus('idle');
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbx6unuPUi54Vb77H-BZYNsILvPWmva5fqbBs_SOF89G64UjF-zW2SYFnfryYFqRiMw1yQ/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbx6unuPUi54Vb77H-BZYNsILvPWmva5fqbBs_SOF89G64UjF-zW2SYFnfryYFqRiMw1yQ/exec',
+        {
+          method: 'POST',
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.ok) {
         setSubmitStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-        });
+        setFormData({ name: '', email: '', phone: '', message: '' });
       } else {
         setSubmitStatus('error');
       }
-    } catch {
+    } catch (error) {
+      console.error('Form submit error:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -47,14 +51,24 @@ export default function Contact() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Auto-fade messages after 3 seconds
+  useEffect(() => {
+    if (submitStatus === 'success' || submitStatus === 'error') {
+      const timer = setTimeout(() => setSubmitStatus('idle'), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 pt-20 px-4 sm:px-6 lg:px-8 relative">
+      {/* Header fixed at top */}
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Header />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -137,31 +151,41 @@ export default function Contact() {
                 ${isSubmitting ? 'bg-gray-400' : 'bg-[#D60A0A] hover:bg-[#B30000]'} 
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D60A0A]`}
             >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {submitStatus === 'success'
+                ? 'Sent ✅'
+                : isSubmitting
+                ? 'Sending...'
+                : 'Send Message'}
             </motion.button>
           </div>
 
-          {submitStatus === 'success' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="p-4 bg-green-50 rounded-md"
-            >
-              <p className="text-green-800 text-center">Message sent successfully!</p>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-4 bg-green-50 rounded-md"
+              >
+                <p className="text-green-800 text-center">Message sent successfully!</p>
+              </motion.div>
+            )}
 
-          {submitStatus === 'error' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="p-4 bg-red-50 rounded-md"
-            >
-              <p className="text-red-800 text-center">Failed to send message. Please try again.</p>
-            </motion.div>
-          )}
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-4 bg-red-50 rounded-md"
+              >
+                <p className="text-red-800 text-center">Failed to send message. Please try again.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </form>
       </motion.div>
+
+      <Footer />
     </div>
   );
 }
