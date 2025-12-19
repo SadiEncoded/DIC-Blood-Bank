@@ -1,25 +1,10 @@
-'use client'
+'use client';
+import { fadeInUpAlt as fadeInUp, slideInRightAlt as slideInRight } from '@/app/lib/animations';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Search, UserPlus } from 'lucide-react';
+import Link from 'next/link';
 import { useRef } from 'react';
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.6 }
-  }
-};
-
-const fadeInRight = {
-  initial: { opacity: 0, x: 50 },
-  animate: { 
-    opacity: 1, 
-    x: 0,
-    transition: { duration: 0.8 }
-  }
-};
+import { Container, Section } from '../ui';
 
 export default function CallToActionSection() {
   const ref = useRef(null);
@@ -27,12 +12,14 @@ export default function CallToActionSection() {
 
   return (
     <>
-      {/* Main CTA Section - Light Background */}
-      <section 
+      {/* Main CTA Section */}
+      <Section 
         ref={ref}
-        className="relative py-20 md:py-28 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden"
+        variant="slate"
+        className="!py-10 md:!py-28" 
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <Container>
+
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Left Content */}
@@ -48,37 +35,37 @@ export default function CallToActionSection() {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                className="text-fluid-section font-heading-opt text-gray-900 mb-6 leading-tight font-poppins"
               >
                 রক্তদানে এগিয়ে আসুন
               </motion.h2>
               
               <motion.div 
                 variants={fadeInUp}
-                className="space-y-4 mb-8 text-gray-700 leading-relaxed"
+                className="space-y-3 mb-6 md:mb-8 text-gray-700 leading-relaxed"
               >
-                <p className="text-base md:text-lg">
+                <p className="text-sm md:text-lg">
                   রক্তদান কোনো কঠিন কাজ নয়, বরং এর মাধ্যমে আপনি সহজেই অন্য একজন মানুষের জীবন বাঁচাতে পারেন। কিন্তু দুর্ভাগ্যজনকভাবে, প্রতিবছর বহু মানুষ জরুরি মুহূর্তে প্রয়োজনীয় রক্তের অভাবে মারা যায়। আপনার সামান্য পরিমাণ রক্তদানের মাধ্যমে একটি জীবন বাঁচানো সম্ভব।
                 </p>
-                <p className="text-base md:text-lg">
+                <p className="text-sm md:text-lg">
                   আমাদের সিস্টেমের মাধ্যমে রক্তদাতাদের তথ্য সংরক্ষণ করে আমরা জরুরি মুহূর্তে দ্রুত রক্তদাতা খুঁজে পেতে সাহায্য করি। যারা রক্তদানে ইচ্ছুক তারা রেজিস্ট্রেশন করে রক্তদাতা হিসেবে যুক্ত হতে পারেন। জরুরি প্রয়োজনে রক্তদাতাদের সহজেই খুঁজে পাওয়া যায়।
                 </p>
               </motion.div>
 
               <motion.div 
                 variants={fadeInUp}
-                className="flex flex-col sm:flex-row gap-4"
+                className="grid grid-cols-2 gap-2 sm:flex sm:flex-row"
               >
-                <button className="group bg-rose-600 hover:bg-rose-700 text-white font-semibold px-8 py-4 rounded-lg flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl">
-                  <UserPlus className="w-5 h-5" />
+                <Link href="/register" className="group bg-rose-600 hover:bg-rose-700 text-white font-semibold px-3 py-2.5 sm:px-8 sm:py-4 rounded-lg flex items-center justify-center gap-1.5 sm:gap-3 transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl text-xs sm:text-base">
+                  <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                   রক্তদাতা হন
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
 
-                <button className="group bg-gray-900 hover:bg-black text-white font-semibold px-8 py-4 rounded-lg flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl">
-                  <Search className="w-5 h-5" />
+                <Link href="/searchDonor" className="group bg-gray-900 hover:bg-black text-white font-semibold px-3 py-2.5 sm:px-8 sm:py-4 rounded-lg flex items-center justify-center gap-1.5 sm:gap-3 transition-all duration-300 active:scale-95 shadow-lg hover:shadow-xl text-xs sm:text-base">
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                   রক্তদাতা খুঁজুন
-                </button>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -86,8 +73,8 @@ export default function CallToActionSection() {
             <motion.div
               initial="initial"
               animate={isInView ? "animate" : "initial"}
-              variants={fadeInRight}
-              className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-1/2 h-[400px] lg:h-[600px]"
+              variants={slideInRight}
+              className="relative lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-1/2 h-[300px] md:h-[400px] lg:h-[600px]"
             >
               <div className="relative w-full h-full rounded-lg lg:rounded-none overflow-hidden">
                 <img
@@ -100,11 +87,14 @@ export default function CallToActionSection() {
             </motion.div>
 
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Bottom Banner - Dark Background */}
-      <section className="relative py-8 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white overflow-hidden">
+
+      {/* Bottom Banner */}
+      <Section variant="dark" className="!py-6 md:!py-8">
+        <Container>
+
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-purple-600"></div>
         </div>
@@ -114,13 +104,15 @@ export default function CallToActionSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-7xl mx-auto px-6 relative z-10"
+          className="relative z-10"
         >
-          <p className="text-center text-lg md:text-xl lg:text-2xl font-light italic">
+          <p className="text-center text-sm md:text-xl lg:text-2xl font-light italic text-white">
             "আপনার এক ফোঁটা রক্ত, বাঁচাতে পারে একটি প্রাণ"
           </p>
         </motion.div>
-      </section>
+        </Container>
+      </Section>
+
     </>
   );
 }

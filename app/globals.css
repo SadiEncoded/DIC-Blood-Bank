@@ -115,3 +115,43 @@ html {
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+@layer utilities {
+  /* Fluid Typography - Scales smoothly from mobile to desktop */
+  
+  /* Hero Headings: 32px -> 60px (Was 7xl: 72px) */
+  .text-fluid-hero {
+    font-size: clamp(2rem, 5vw + 1rem, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* Section Headings: 24px -> 40px (Was 5xl: 48px) */
+  .text-fluid-section {
+    font-size: clamp(1.5rem, 3vw + 0.75rem, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* Card Headings: 18px -> 24px */
+  .text-fluid-card {
+    font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem);
+    line-height: 1.3;
+  }
+
+  /* Weight adjustments for balanced scaling */
+  .font-heading-opt {
+    @apply font-semibold; /* Reduced from font-bold to prevent heaviness */
+  }
+
+  .font-bengali-opt {
+    @apply font-normal; /* Large Bengali shouldn't be too thick */
+  }
+}
+/* app/globals.css */
+@layer components {
+  .form-input {
+    @apply w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl 
+           focus:border-rose-500 focus:ring-4 focus:ring-rose-50/50 
+           transition-all outline-none text-sm font-hind text-slate-900;
+  }
+}

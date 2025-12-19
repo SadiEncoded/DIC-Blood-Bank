@@ -2,7 +2,7 @@ import Hero from '@/components/home/Hero';
 import Infos from '@/components/home/Infos';
 import Process from '@/components/home/Process';
 import Testimonials from '@/components/home/Testimonials';
-import Aboutus from '@/components/home/aboutus';
+import CTA from '@/components/home/CTA';
 
 export default function Home() {
   return (
@@ -11,7 +11,7 @@ export default function Home() {
       <Infos />
       <Process />
       <Testimonials />
-      <Aboutus />
+      <CTA />
     </div>
   );
 }
