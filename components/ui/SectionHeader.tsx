@@ -1,47 +1,70 @@
 // components/ui/SectionHeader.tsx
+'use client';
+
+import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 export interface SectionHeaderProps {
-  icon?: ReactNode;
-  badge?: string;
+  eyebrow?: string;
   title: string;
+  italicTitle?: string;
   subtitle?: string;
-  action?: ReactNode;
+  rightElement?: ReactNode;
   centered?: boolean;
+  className?: string;
 }
 
 export function SectionHeader({
-  icon,
-  badge,
+  eyebrow,
   title,
+  italicTitle,
   subtitle,
-  action,
+  rightElement,
   centered = false,
+  className = "",
 }: SectionHeaderProps) {
   const alignmentStyles = centered ? 'text-center items-center' : 'text-left items-start';
   
   return (
-    <div className={`flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12 ${alignmentStyles}`}>
-      <div className={centered ? 'mx-auto max-w-2xl' : 'max-w-2xl'}>
-        {badge && (
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-bold uppercase tracking-widest mb-4 ${centered ? 'mx-auto' : ''}`}>
-            {icon && <span className="w-4 h-4">{icon}</span>}
-            <span>{badge}</span>
-          </div>
+    <div className={`flex flex-col md:flex-row justify-between gap-8 mb-16 md:mb-24 ${centered ? 'items-center' : 'items-start md:items-end'} ${className}`}>
+      <div className={`max-w-2xl ${centered ? 'text-center' : ''}`}>
+        {eyebrow && (
+          <motion.span 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-[10px] font-bold tracking-[0.4em] text-rose-600 uppercase mb-4 block"
+          >
+            {eyebrow}
+          </motion.span>
         )}
         
-        <h2 className="text-fluid-section font-heading-opt text-slate-900 mb-4 font-poppins">
+        <motion.h3 
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-slate-900 font-poppins tracking-tighter"
+        >
           {title}
-        </h2>
-        
+          {italicTitle && (
+            <>
+              <br />
+              <span className="text-slate-400 font-light italic">{italicTitle}</span>
+            </>
+          )}
+        </motion.h3>
+
         {subtitle && (
-          <p className="text-slate-600 text-sm md:text-lg leading-relaxed font-hind">
+          <p className="mt-6 text-slate-600 text-sm md:text-lg leading-relaxed font-hind">
             {subtitle}
           </p>
         )}
       </div>
       
-      {action && <div>{action}</div>}
+      {rightElement && (
+        <div className={centered ? 'w-full flex justify-center' : 'text-right hidden md:block'}>
+          {rightElement}
+        </div>
+      )}
     </div>
   );
 }

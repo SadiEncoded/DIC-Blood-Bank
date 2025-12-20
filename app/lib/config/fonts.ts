@@ -1,6 +1,4 @@
-// app/fonts.ts
-import { Hind_Siliguri } from 'next/font/google';
-import { Anek_Bangla } from 'next/font/google';
+import { Anek_Bangla, Hind_Siliguri } from 'next/font/google';
 
 // Anek Bangla (Headers (h1–h6) → font-anekBangla)
 export const anekBangla = Anek_Bangla({

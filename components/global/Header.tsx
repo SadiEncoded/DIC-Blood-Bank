@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { label: 'Search Donor', href: '/searchDonor' },
   { label: 'Events', href: '/events' },
   { label: 'Community', href: '/community' },
-  { label: 'Hall of Fame', href: '/hall-of-fame' },
+  { label: 'Donors', href: '/donors' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' }
 ];

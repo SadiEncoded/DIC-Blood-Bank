@@ -1,7 +1,7 @@
 'use client'
 
-import { LucideIcon } from 'lucide-react';
 import { cn } from '@/app/lib/utils';
+import { LucideIcon } from 'lucide-react';
 
 interface InfoRowProps {
   icon?: LucideIcon;

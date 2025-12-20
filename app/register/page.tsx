@@ -1,5 +1,5 @@
+import RegisterForm from './components/Form';
 import { RegisterHero } from './components/Hero';
-import RegisterForm  from './components/Form.tsx';
 
 export default function RegistrationPage() {
   return (

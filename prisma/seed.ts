@@ -1,13 +1,12 @@
 import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/client';
 import "dotenv/config";
-import { PrismaClient } from '../generated/prisma/client';
 
 // Import centralized data
-import { MISSION_VISION } from '../app/lib/data/about.js';
-import { COMMUNITY_HERO, TEAM_SECTION } from '../app/lib/data/community.js';
-import { team } from '../app/lib/data/founders.js';
-import { HERO_CONTENT, TYPING_PHRASES } from '../app/lib/data/hero.js';
-import { WHO_CAN_DONATE, WHY_DONATE } from '../app/lib/data/info.js';
+import { FOUNDERS, MISSION_VISION } from '../app/lib/data/about/index';
+import { COMMUNITY_HERO, TEAM_SECTION } from '../app/lib/data/community/index';
+import { DONOR_REGISTRY } from '../app/lib/data/donors/index';
+import { DONOR_STORIES, HERO_CONTENT, INFO_SECTIONS } from '../app/lib/data/homepage/index';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
@@ -38,7 +37,7 @@ async function main() {
       description: HERO_CONTENT.description,
       items: {
         create: [
-          ...TYPING_PHRASES.map((phrase, idx) => ({ key: 'typing-phrase', content: phrase, order: idx })),
+          ...HERO_CONTENT.typingPhrases.map((phrase, idx) => ({ key: 'typing-phrase', content: phrase, order: idx })),
           { key: 'cta-donor', content: HERO_CONTENT.cta.donor },
           { key: 'cta-find', content: HERO_CONTENT.cta.find },
           { key: 'trust-value', content: HERO_CONTENT.trust.value },
@@ -48,6 +47,9 @@ async function main() {
     },
   });
 
+  const whyDonate = INFO_SECTIONS[0]!;
+  const whoCanDonate = INFO_SECTIONS[1]!;
+
   // Why Donate Section
   await prisma.section.upsert({
     where: { pageId_identifier: { pageId: home.id, identifier: 'why-donate' } },
@@ -55,9 +57,9 @@ async function main() {
     create: {
       pageId: home.id,
       identifier: 'why-donate',
-      title: WHY_DONATE.title,
+      title: whyDonate.title,
       items: {
-        create: WHY_DONATE.items.map((item, idx) => ({
+        create: whyDonate.items.map((item, idx) => ({
           content: item.text,
           icon: 'Droplet', // Simplified for seeding
           order: idx,
@@ -73,9 +75,9 @@ async function main() {
     create: {
       pageId: home.id,
       identifier: 'who-can-donate',
-      title: WHO_CAN_DONATE.title,
+      title: whoCanDonate.title,
       items: {
-        create: WHO_CAN_DONATE.items.map((item, idx) => ({
+        create: whoCanDonate.items.map((item, idx) => ({
           content: item.text,
           icon: 'Shield',
           order: idx,
@@ -158,11 +160,58 @@ async function main() {
 
   // --- FOUNDERS/TEAM ---
   console.log('👥 Seeding Team Members...');
-  for (const member of team) {
+  for (const member of FOUNDERS) {
     await prisma.teamMember.upsert({
       where: { name: member.name },
       update: member,
       create: member,
+    });
+  }
+
+  // --- DONORS ---
+  console.log('🩸 Seeding Donors...');
+  const bloodTypeMap: Record<string, any> = {
+    'A+': 'A_POSITIVE',
+    'A-': 'A_NEGATIVE',
+    'B+': 'B_POSITIVE',
+    'B-': 'B_NEGATIVE',
+    'AB+': 'AB_POSITIVE',
+    'AB-': 'AB_NEGATIVE',
+    'O+': 'O_POSITIVE',
+    'O-': 'O_NEGATIVE',
+  };
+
+  for (const donor of DONOR_REGISTRY) {
+    await prisma.donor.upsert({
+      where: { phone: donor.phone || donor.id.toString() }, // Use phone or id as unique key
+      update: {},
+      create: {
+        name: donor.name,
+        phone: donor.phone || `017${Math.floor(Math.random() * 10000000).toString().padStart(7, '0')}`,
+        bloodType: bloodTypeMap[donor.blood] || 'O_POSITIVE',
+        location: donor.location || 'Dhaka',
+        donationCount: donor.count,
+        tier: (donor.tier.toUpperCase()) as any,
+        lastDonation: donor.lastDonation ? new Date(donor.lastDonation) : null,
+      },
+    });
+  }
+
+  // --- DONOR STORIES ---
+  console.log('📖 Seeding Donor Stories...');
+  for (const story of DONOR_STORIES) {
+    await (prisma.donorStory as any).upsert({
+      where: { id: story.id.toString() },
+      update: {},
+      create: {
+        id: story.id.toString(),
+        name: story.name,
+        location: story.location,
+        bloodType: story.bloodType,
+        donations: story.donations,
+        story: story.story,
+        rating: 5,
+      },
     });
   }
 

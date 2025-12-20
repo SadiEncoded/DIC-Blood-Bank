@@ -1,8 +1,6 @@
 'use client'
 
 import { CONTACT_INFO } from '@/app/lib/data/contact';
-import { cn } from '@/app/lib/utils';
-import { AlertCircle, Phone, ArrowUpRight } from 'lucide-react';
 
 export default function EmergencyContact() {
   return (

@@ -1,4 +1,5 @@
 // components/ui/Button.tsx
+'use client';
 import { motion } from 'framer-motion';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 
@@ -26,11 +27,11 @@ export function Button({
   const baseStyles = 'inline-flex items-center justify-center gap-2 font-bold rounded-2xl transition-all duration-300 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed font-poppins';
   
   const variantStyles = {
-    primary: 'bg-rose-600 text-white hover:bg-rose-700 shadow-md hover:shadow-xl',
-    secondary: 'bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100',
-    outline: 'border-2 border-rose-600 text-rose-600 hover:bg-rose-50',
-    ghost: 'text-rose-600 hover:bg-rose-50',
-    gradient: 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md hover:shadow-xl',
+    primary: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-xl',
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border',
+    outline: 'border-2 border-primary text-primary hover:bg-primary/5',
+    ghost: 'text-primary hover:bg-primary/5',
+    gradient: 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-md hover:shadow-xl',
   };
   
   const sizeStyles = {

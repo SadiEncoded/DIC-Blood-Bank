@@ -1,21 +1,18 @@
 'use client';
-
+import { registerDonor } from '@/app/lib/actions/forms';
+import { BLOOD_TYPES as bloodTypes } from '@/app/lib/config';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, 
-  Calendar, 
-  Droplet, 
-  Phone, 
-  ShieldCheck, 
-  User, 
-  Mail, 
-  MapPin, 
-  CheckCircle2 
+import {
+  ArrowRight,
+  CheckCircle2,
+  Droplet,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
-const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -32,10 +29,17 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('রেজিস্ট্রেশন সফল হয়েছে!');
+    
+    const result = await registerDonor(formData);
+    
+    if (result.success) {
+      toast.success(result.message);
+      setFormData({ name: '', phone: '', email: '', bloodType: '', location: '', age: '' });
+    } else {
+      toast.error(result.message);
+    }
+    
     setIsSubmitting(false);
-    setFormData({ name: '', phone: '', email: '', bloodType: '', location: '', age: '' });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -152,9 +156,6 @@ export default function RegisterForm() {
             {isSubmitting ? "Processing..." : "Submit Registration"}
             <ArrowRight size={16} />
           </button>
-          <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter text-center md:text-left">
-            Your data is stored securely <br /> in our local database.
-          </p>
         </div>
       </form>
 

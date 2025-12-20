@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
 import { Container, Section } from '../../../components/ui';

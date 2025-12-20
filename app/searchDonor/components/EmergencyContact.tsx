@@ -1,5 +1,6 @@
-import { Phone, Clock, ShieldCheck } from 'lucide-react';
+'use client';
 import { motion } from 'framer-motion';
+import { Clock, Phone, ShieldCheck } from 'lucide-react';
 
 export function EmergencyContact() {
   return (

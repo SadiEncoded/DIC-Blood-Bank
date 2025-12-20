@@ -1,6 +1,8 @@
 'use client';
 
-import { BLOOD_TYPES } from '@/app/lib/constants';
+import { submitBloodRequest } from '@/app/lib/actions/forms';
+import { BLOOD_TYPES } from '@/app/lib/config';
+import { FormField } from '@/components/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, ClipboardList, Droplet, MapPin, Phone, User } from 'lucide-react';
@@ -15,7 +17,6 @@ const bloodRequestSchema = z.object({
   requiredBy: z.string().min(1, 'Date is required'),
   urgency: z.enum(['normal', 'urgent', 'critical']),
   unitsNeeded: z.number().min(1).max(10),
-  // New Institutional Fields
   contactName: z.string().min(2, 'Contact person name is required'),
   contactPhone: z.string().regex(/^(?:\+88)?01[3-9]\d{8}$/, 'Valid BD phone number required'),
   reason: z.string().optional(),
@@ -30,9 +31,19 @@ export function BloodRequestForm() {
   });
 
   const onSubmit: SubmitHandler<BloodRequestFormType> = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Request submitted. Our coordinator will call you shortly.');
-    reset();
+    const result = await submitBloodRequest({
+      ...data,
+      units: data.unitsNeeded,
+      neededBy: data.requiredBy,
+      location: data.hospital, // We'll use hospital as location for simplicity or add a location field
+    })
+    
+    if (result.success) {
+      toast.success(result.message)
+      reset()
+    } else {
+      toast.error(result.message)
+    }
   };
 
   return (
@@ -112,19 +123,5 @@ export function BloodRequestForm() {
         </button>
       </form>
     </motion.div>
-  );
-}
-
-// Sub-component and styles
-function FormField({ label, icon, children, error }: any) {
-  return (
-    <div className="space-y-1.5">
-      <label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 ml-1">{label}</label>
-      <div className="relative group">
-        {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-rose-500 transition-colors">{icon}</div>}
-        {children}
-      </div>
-      {error && <p className="text-[9px] font-bold text-rose-600 mt-1 uppercase tracking-tight">{error.message}</p>}
-    </div>
   );
 }

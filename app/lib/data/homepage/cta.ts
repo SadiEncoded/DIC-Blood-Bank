@@ -1,4 +1,3 @@
-//lib/data/cta.ts
 export const CTA_CONTENT = {
   mission: {
     badge: "আমাদের মিশন",

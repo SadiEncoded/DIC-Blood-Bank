@@ -3,15 +3,15 @@
 // ============================================
 
 import { ThemeProvider } from "@/app/lib/contexts/ThemeContext";
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
+import Footer from "@/components/global/Footer";
+import Header from "@/components/global/Header";
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import React from "react";
 import { Toaster } from "sonner";
 import './globals.css';
 
-import { anekBangla, hind } from "@/app/lib/fonts";
+import { anekBangla, hind } from "@/app/lib/config";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   description: "DIC Blood Bank—একটি শিক্ষার্থী-নেতৃত্বাধীন, মানবিক ও প্রযুক্তিনির্ভর সামাজিক উদ্যোগ, যার লক্ষ্য চাঁদপুর জেলার সকল নাগরিকদের জন্য একটি নির্ভরযোগ্য ও নিরাপদ দ্রুত রক্তদাতা নেটওয়ার্ক গড়ে তোলা।",
   keywords: ["DIC Blood Bank","Daffodil International College","Phoenix'24","Blood Donation Chandpur","Student Initiative","রক্তদান"],
-  authors: [{ name: "Mahmudul Hasan Sadi", url: "https://github.com/yourusername" }],
+  authors: [{ name: "Mahmudul Hasan Sadi", url: "https://github.com/SadiEncoded" }],
   creator: "Daffodil International College Blood Bank",
   publisher: "Daffodil International College",
   metadataBase: new URL("https://dic-blood-bank.vercel.app"),

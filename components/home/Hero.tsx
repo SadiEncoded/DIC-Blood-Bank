@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { Container, Section } from '../ui';
 
-import { STATS } from '@/app/lib/data/hall-of-fame';
-import { HERO_CONTENT, TYPING_PHRASES } from '@/app/lib/data/hero';
+import { theme } from '@/app/lib/config';
+import { DONOR_STATS, HERO_CONTENT } from '@/app/lib/data/homepage';
+import { Stat } from '@/app/lib/types';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Users } from 'lucide-react';
 import Image from 'next/image';
@@ -21,7 +22,7 @@ function TypewriterEffect() {
   }, [blink]);
 
   useEffect(() => {
-    const currentPhrase = TYPING_PHRASES[index];
+    const currentPhrase = HERO_CONTENT.typingPhrases[index];
     if (!currentPhrase) return;
 
     if (subIndex === currentPhrase.length + 1 && !reverse) {
@@ -31,7 +32,7 @@ function TypewriterEffect() {
 
     if (subIndex === 0 && reverse) {
       setReverse(false);
-      setIndex((prev) => (prev + 1) % TYPING_PHRASES.length);
+      setIndex((prev) => (prev + 1) % HERO_CONTENT.typingPhrases.length);
       return;
     }
 
@@ -44,17 +45,18 @@ function TypewriterEffect() {
 
   return (
     <span className="inline-block min-w-[200px] text-left">
-      {TYPING_PHRASES[index]?.substring(0, subIndex) || ''}
+      {HERO_CONTENT.typingPhrases[index]?.substring(0, subIndex) || ''}
       <span className={`${blink ? 'opacity-100' : 'opacity-0'} ml-1 inline-block w-1 h-6 md:h-12 bg-rose-500 align-middle shadow-[0_0_10px_rgba(244,63,94,0.8)]`} />
     </span>
   );
 }
 
-export default function Hero() {
+export default function Hero({ stats }: { stats?: Stat[] }) {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 100]);
 
-  const donorsStat = STATS.find(s => s.tone === 'rose') || STATS[0];
+  const activeStats = stats || DONOR_STATS;
+  const donorsStat = activeStats.find((s: Stat) => s.tone === 'rose') || activeStats[0];
 
   return (
     <Section variant="dark" className="!min-h-screen flex items-center !pt-24 !pb-12 md:!pt-32 md:!pb-32 selection:bg-rose-500/30 selection:text-rose-100">
@@ -70,9 +72,7 @@ export default function Hero() {
         >
           {/* Badge */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            {...theme.animations.variants.fadeInUp}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-8 hover:bg-white/10 transition-colors group"
           >
             <span className="relative flex h-2 w-2">

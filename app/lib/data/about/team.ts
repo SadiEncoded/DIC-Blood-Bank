@@ -4,9 +4,10 @@ export interface TeamMember {
   institution: string;
   role: string;
   image: string;
+  quote?: string; 
 }
 
-export const team: TeamMember[] = [
+export const FOUNDERS: TeamMember[] = [
   { name: "Mahmudul Hasan Sadi", study: "CSE Department, 2nd Batch (Phoenix'24)", institution: "Daffodil International College, Baburhat", role: "Web Developer", image: "/FoundingTeam/Sadi(Web-Developer).jpg" },
   { name: "Mahin Binta Matin", study: "CSE Department, 2nd Batch (Phoenix'24)", institution: "Daffodil International College, Baburhat", role: "UI/UX Designer", image: "/FoundingTeam/Mahin.jpg" },
   { name: "Prottasha Chakraborty", study: "CSE Department, 2nd Batch (Phoenix'24)", institution: "Daffodil International College, Baburhat", role: "Data Analyst", image: "/FoundingTeam/Prottasha.jpg" },

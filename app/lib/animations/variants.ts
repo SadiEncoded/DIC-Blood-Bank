@@ -1,4 +1,3 @@
-// app/lib/animations.ts
 import { Variants } from 'framer-motion';
 
 // Fade animations

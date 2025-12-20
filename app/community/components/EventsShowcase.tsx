@@ -1,6 +1,6 @@
 'use client';
 
-import { events } from "@/app/lib/data/events";
+import { events } from "@/app/lib/data/shared";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Plus } from "lucide-react";
 import Image from 'next/image';

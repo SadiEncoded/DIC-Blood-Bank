@@ -1,6 +1,6 @@
 'use client';
 
-import { CTA_CONTENT } from '@/app/lib/data/cta';
+import { CTA_CONTENT } from '@/app/lib/data/homepage';
 import { motion } from 'framer-motion';
 import { Award, Clock, Heart, Shield } from 'lucide-react';
 

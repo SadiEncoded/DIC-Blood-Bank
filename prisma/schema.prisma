@@ -1,13 +1,142 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// --- ENUMS ---
+model Donor {
+  id            String    @id @default(cuid())
+  name          String
+  email         String?   @unique
+  phone         String    @unique
+  bloodType     BloodType
+  location      String
+  lastDonation  DateTime?
+  donationCount Int       @default(0)
+  tier          DonorTier @default(BRONZE)
+  availability  Boolean   @default(true)
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model BloodRequest {
+  id           String       @id @default(cuid())
+  patientName  String
+  bloodType    BloodType
+  units        Int          @default(1)
+  hospital     String
+  location     String
+  contactPhone String
+  urgency      UrgencyLevel @default(NORMAL)
+  neededBy     DateTime
+  notes        String?
+  isFulfilled  Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  contactName  String?
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DonorStory {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?  @default("নিমিত্ত রক্তদাতা")
+  story     String   @map("quote")
+  image     String?
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+  bloodType String?
+  donations Int      @default(0)
+  location  String?
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  study       String
+  institution String
+  role        String
+  image       String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Stats {
+  id               String   @id @default(cuid())
+  registeredDonors Int      @default(0)
+  unitsCollected   Int      @default(0)
+  livesSaved       Int      @default(0)
+  activeVolunteers Int      @default(0)
+  updatedAt        DateTime @updatedAt
+}
+
+model Page {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  sections    Section[]
+}
+
+model Section {
+  id          String        @id @default(cuid())
+  pageId      String
+  identifier  String
+  title       String?
+  subtitle    String?
+  badge       String?
+  description String?
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  image       String?
+  items       ContentItem[]
+  page        Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, identifier])
+}
+
+model ContentItem {
+  id        String   @id @default(cuid())
+  sectionId String
+  key       String?
+  title     String?
+  content   String?
+  icon      String?
+  image     String?
+  link      String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  badge     String?
+  subtitle  String?
+  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
 
 enum BloodType {
   A_POSITIVE  @map("A+")
@@ -31,126 +160,4 @@ enum DonorTier {
   GOLD
   SILVER
   BRONZE
-}
-
-// --- CORE ENTITIES ---
-
-model Donor {
-  id            String    @id @default(cuid())
-  name          String
-  email         String?   @unique
-  phone         String    @unique
-  bloodType     BloodType
-  location      String
-  lastDonation  DateTime?
-  donationCount Int       @default(0)
-  tier          DonorTier @default(BRONZE)
-  availability  Boolean   @default(true)
-  isVerified    Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
-
-model BloodRequest {
-  id            String       @id @default(cuid())
-  patientName   String
-  bloodType     BloodType
-  units         Int          @default(1)
-  hospital      String
-  location      String
-  contactPhone  String
-  urgency       UrgencyLevel @default(NORMAL)
-  neededBy      DateTime
-  notes         String?
-  isFulfilled   Boolean      @default(false)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-}
-
-model Event {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  date        DateTime
-  location    String
-  image       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model DonorStory {
-  id        String   @id @default(cuid())
-  name      String
-  role      String?  @default("নিমিত্ত রক্তদাতা")
-  quote     String
-  image     String?
-  rating    Int      @default(5)
-  createdAt DateTime @default(now())
-}
-
-model TeamMember {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  study       String
-  institution String
-  role        String
-  image       String
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-}
-
-model Stats {
-  id               String   @id @default(cuid())
-  registeredDonors Int      @default(0)
-  unitsCollected   Int      @default(0)
-  livesSaved       Int      @default(0)
-  activeVolunteers Int      @default(0)
-  updatedAt        DateTime @updatedAt
-}
-
-// --- LAYERED CONTENT MANAGEMENT ---
-
-model Page {
-  id          String    @id @default(cuid())
-  slug        String    @unique // e.g., 'home', 'about', 'community'
-  title       String
-  description String?
-  sections    Section[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Section {
-  id          String        @id @default(cuid())
-  page        Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  pageId      String
-  identifier  String        // e.g., 'hero', 'mission-vision', 'cta'
-  title       String?
-  subtitle    String?
-  badge       String?
-  description String?
-  image       String?
-  order       Int           @default(0)
-  items       ContentItem[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-
-  @@unique([pageId, identifier])
-}
-
-model ContentItem {
-  id        String   @id @default(cuid())
-  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  sectionId String
-  key       String?  // e.g., 'button-text', 'trust-value'
-  title     String?
-  subtitle  String?
-  badge     String?
-  content   String?
-  icon      String?  // Name of the Lucide icon
-  image     String?
-  link      String?
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

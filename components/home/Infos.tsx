@@ -1,12 +1,30 @@
 'use client';
 
 import { fadeInUp, imageScale } from '@/app/lib/animations';
-import { COLOR_THEMES } from '@/app/lib/constants';
-import { MISCONCEPTIONS, WHO_CAN_DONATE, WHY_DONATE } from '@/app/lib/data/info';
+import { INFO_SECTIONS } from '@/app/lib/data/homepage';
+import { ColorThemeKey } from '@/app/lib/types';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Droplet } from 'lucide-react';
 import { useRef } from 'react';
 import { Container, Section } from '../ui';
+
+const COLOR_THEMES: Record<ColorThemeKey, { iconBg: string; iconColor: string; gradient: string }> = {
+  rose: {
+    iconBg: 'bg-rose-100',
+    iconColor: 'text-rose-600',
+    gradient: 'from-rose-400 via-rose-500 to-rose-600',
+  },
+  blue: {
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+    gradient: 'from-blue-400 via-blue-500 to-blue-600',
+  },
+  purple: {
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+    gradient: 'from-purple-400 via-purple-500 to-purple-600',
+  },
+};
 
 // Reusable Info Card Component
 interface InfoCardProps {
@@ -105,6 +123,12 @@ function DonationImage({ src, alt, delay = 0 }: DonationImageProps) {
 
 // Main Component
 export default function BloodDonationInfo() {
+  if (!INFO_SECTIONS || INFO_SECTIONS.length < 3) return null;
+
+  const [section1, section2, section3] = INFO_SECTIONS;
+  
+  if (!section1 || !section2 || !section3) return null;
+
   return (
     <Section variant="slate" aria-labelledby="donation-info-heading">
       <Container>
@@ -112,9 +136,9 @@ export default function BloodDonationInfo() {
         {/* Top Row: Card - Image - Card */}
         <div className="grid grid-cols-1 min-[500px]:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-6 md:mb-8">
           <InfoCard 
-            title={WHY_DONATE.title}
-            items={WHY_DONATE.items}
-            colorTheme={WHY_DONATE.colorTheme}
+            title={section1.title}
+            items={section1.items}
+            colorTheme={section1.colorTheme as ColorThemeKey}
             delay={0}
           />
           
@@ -125,9 +149,9 @@ export default function BloodDonationInfo() {
           />
           
           <InfoCard 
-            title={WHO_CAN_DONATE.title}
-            items={WHO_CAN_DONATE.items}
-            colorTheme={WHO_CAN_DONATE.colorTheme}
+            title={section2.title}
+            items={section2.items}
+            colorTheme={section2.colorTheme as ColorThemeKey}
             delay={0.2}
           />
         </div>
@@ -141,9 +165,9 @@ export default function BloodDonationInfo() {
           />
           
           <InfoCard 
-            title={MISCONCEPTIONS.title}
-            items={MISCONCEPTIONS.items}
-            colorTheme={MISCONCEPTIONS.colorTheme}
+            title={section3.title}
+            items={section3.items}
+            colorTheme={section3.colorTheme as ColorThemeKey}
             delay={0.4}
           />
         </div>

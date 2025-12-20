@@ -1,0 +1,37 @@
+
+> dic-blood-bank@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ Γ£ô Compiled successfully in 8.2s
+   Running TypeScript ...
+
+<--- Last few GCs --->
+
+[18136:000001A79F4AB000]      109 ms: Scavenge 6.0 (7.8) -> 5.6 (10.3) MB, pooled: 0 MB, 2.50 / 0.00 ms  (average mu = 1.000, current mu = 1.000) allocation failure; 
+
+FATAL ERROR: AlignedAlloc Allocation failed - process out of memory
+----- Native stack trace -----
+
+ 1: 00007FF6C082E339 
+ 2: 00007FF6C146FE37 
+ 3: 00007FF6C0DEDD8E 
+ 4: 00007FF6C0F67D0B 
+ 5: 00007FF6C0F65CFC 
+ 6: 00007FF6C12AB347 
+ 7: 00007FF6C1466431 
+ 8: 00007FF6C14670DB 
+ 9: 00007FF6C0F17CFE 
+10: 00007FF6C0F1743A 
+11: 00007FF6C0F12A69 
+12: 00007FF6C13ED82F 
+13: 00007FF6C13F0631 
+14: 00007FF6C14792F3 
+15: 00007FF6C0849C73 
+16: 00007FF6C0848251 
+17: 000001A7C734F64D 
+Next.js build worker exited with code: 134 and signal: null

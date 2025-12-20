@@ -1,4 +1,4 @@
-// app/lib/constants.ts
+// app/lib/config/constants.ts
 
 // Blood Types
 export const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as const;
@@ -40,24 +40,3 @@ export const BADGE_COLORS = {
   Silver: 'bg-slate-100 text-slate-700 border-slate-200',
   Bronze: 'bg-rose-100 text-rose-700 border-rose-200',
 } as const;
-
-// Color Themes for Components
-export const COLOR_THEMES = {
-  rose: {
-    iconBg: 'bg-rose-100',
-    iconColor: 'text-rose-600',
-    gradient: 'from-rose-400 via-rose-500 to-rose-600',
-  },
-  blue: {
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    gradient: 'from-blue-400 via-blue-500 to-blue-600',
-  },
-  purple: {
-    iconBg: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-    gradient: 'from-purple-400 via-purple-500 to-purple-600',
-  },
-} as const;
-
-export type ColorThemeKey = keyof typeof COLOR_THEMES;

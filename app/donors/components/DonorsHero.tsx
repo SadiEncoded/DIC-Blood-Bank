@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from "framer-motion";
-import { Star, ChevronDown } from "lucide-react";
+import { ChevronDown, Star } from "lucide-react";
 
-export function HallHero() {
+export function DonorsHero() {
   return (
     <section className="relative w-full overflow-hidden bg-[#0a0f1a] pt-24 md:pt-40 pb-24 md:pb-32">
       {/* Background Layering matching CommunityHero */}
@@ -27,7 +27,7 @@ export function HallHero() {
         >
           <Star size={14} className="text-rose-500 fill-rose-500/20" />
           <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-slate-300 font-poppins">
-            Donor Excellence Hall
+            Blood Heroes
           </span>
         </motion.div>
         
@@ -38,9 +38,9 @@ export function HallHero() {
           transition={{ delay: 0.1, duration: 0.6 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight font-poppins"
         >
-          আজীবন <br className="md:hidden" />
+          আমাদের <br className="md:hidden" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-rose-500 to-red-600 font-hind">
-            রক্তদাতা সম্মাননা
+             রক্তদাতা
           </span>
         </motion.h1>
         
@@ -51,8 +51,8 @@ export function HallHero() {
           transition={{ delay: 0.25, duration: 0.8 }}
           className="text-slate-400 font-hind text-base md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90"
         >
-          প্রতিষ্ঠানটির সেবামূলক যাত্রায় যেসব দাতা নিয়মিত রক্তদানের মাধ্যমে মানবিকতার <br className="hidden md:block" /> 
-          অনন্য দৃষ্টান্ত স্থাপন করেছেন, আমরা কৃতজ্ঞচিত্তে তাঁদের স্মরণ করি।
+          আপনার প্রয়োজনে পাশে দাঁড়াতে প্রস্তুত আমাদের নিবেদিত রক্তদাতাদের তালিকা। <br className="hidden md:block" /> 
+          রক্তদান মহৎ দান, মানবতার সেবায় এগিয়ে আসুন।
         </motion.p>
 
          {/* Scroll Indicator */}
