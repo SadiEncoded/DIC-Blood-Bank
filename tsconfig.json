@@ -37,16 +37,10 @@
         "./lib/*"
       ],
       "@/types/*": [
-        "./app/types/*"
+        "./lib/types/*"
       ],
       "@/utils/*": [
-        "./app/utils/*"
-      ],
-      "@/styles/*": [
-        "./app/styles/*"
-      ],
-      "@/hooks/*": [
-        "./app/hooks/*"
+        "./lib/utils/*"
       ]
     }
   },

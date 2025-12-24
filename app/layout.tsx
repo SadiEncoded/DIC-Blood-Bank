@@ -2,16 +2,13 @@
 // 📁 app/layout.tsx
 // ============================================
 
-import { ThemeProvider } from "@/app/lib/contexts/ThemeContext";
-import Footer from "@/components/global/Footer";
-import Header from "@/components/global/Header";
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import React from "react";
-import { Toaster } from "sonner";
 import './globals.css';
 
-import { anekBangla, hind } from "@/app/lib/config";
+import { anekBangla, hind } from "@/lib/config";
+import { Providers } from "./providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -71,7 +68,6 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true, email: true, address: true },
   category: "Healthcare",
   alternates: { canonical: "https://dic-blood-bank.vercel.app" },
-  
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -95,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className={`${inter.variable} ${poppins.variable} ${hind.variable} ${anekBangla.variable} font-sans antialiased bg-background text-foreground transition-colors duration-300`}>
-        <ThemeProvider>
+        <Providers>
           {/* Accessibility Skip Link */}
           <a
             href="#main-content"
@@ -104,22 +100,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Skip to main content
           </a>
 
-          {/* Global Notifications */}
-          <Toaster position="top-right" richColors />
-
-          {/* Premium Header */}
-          <Header />
-
-          {/* Main Content */}
-          <div className="relative flex flex-col min-h-screen">
-            <main id="main-content" className="flex-1 flex flex-col" role="main">
-              {children}
-            </main>
-            
-            {/* Footer */}
-            <Footer />
-          </div>
-        </ThemeProvider>
+          {children}
+        </Providers>
       </body>
     </html>
   );
