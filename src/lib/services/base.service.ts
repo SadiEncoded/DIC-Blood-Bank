@@ -138,7 +138,7 @@ export abstract class BaseService {
         profileRole: (profile as any)?.role,
         expectedRole: 'admin' 
       });
-      console.error(`❌ Admin Access Denied: User ${user.email} has role ${(profile as any)?.role}`);
+      // Logged above, no need for double logging
       throw new AuthorizationError('Admin access required');
     }
 

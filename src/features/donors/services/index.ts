@@ -1,5 +1,6 @@
 'use server';
 
+import { logger } from '@/lib/logger';
 import { mapBloodTypeToDB, mapDBToBloodType } from '@/utils/db-mapping';
 import { revalidatePath } from 'next/cache';
 import { donorService } from './donor.service';
@@ -40,7 +41,7 @@ export async function searchDonors(query: {
     }));
 
   } catch (err: any) {
-    console.error("Search Action Error:", err);
+    logger.error("Search Action Error:", err);
     throw new Error(err.message || 'Failed to search donors');
   }
 }
@@ -49,8 +50,8 @@ export async function getDonorCount() {
     try {
         const count = await donorService.getDonorCount();
         return count;
-    } catch (error) {
-        console.error('Donor count fetch failed:', error);
+    } catch (error: any) {
+        logger.error('Donor count fetch failed:', error);
         return 0;
     }
 }
@@ -64,7 +65,7 @@ export async function confirmDonation(donorId: string) {
       revalidatePath('/admin');
       return { success: true, newCount: (result as any)?.donation_count };
   } catch (err: any) {
-      console.error("confirmDonation Action Failed:", err);
+      logger.error("confirmDonation Action Failed:", err);
       return { success: false, error: err.message || 'Internal Server Error' };
   }
 }
