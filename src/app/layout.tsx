@@ -68,13 +68,14 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true, email: true, address: true },
   category: "Healthcare",
   alternates: { canonical: "https://dic-blood-bank.vercel.app" },
+};
+
+export const viewport = {
   themeColor: "#e11d48",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 

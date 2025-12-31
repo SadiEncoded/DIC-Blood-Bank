@@ -1,6 +1,8 @@
 import { ArticleFeed, LearnHero } from '@/features/learn';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   // Combined bilingual metadata for better SEO and accessibility
   title: 'রক্তদান সম্পর্কে জানুন | Learn About Blood Donation',

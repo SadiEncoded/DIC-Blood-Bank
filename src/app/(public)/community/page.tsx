@@ -4,6 +4,8 @@ import CommunityPosts from '@/features/community/components/CommunityPosts';
 import EventsShowcase from '@/features/community/components/EventsShowcase';
 import { getEvents } from '@/features/events/services';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CommunityPage() {
   const events = await getEvents();
 
