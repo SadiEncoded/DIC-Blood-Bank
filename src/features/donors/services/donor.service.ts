@@ -156,6 +156,7 @@ export class DonorService extends BaseService {
     const { count, error } = await supabase
         .from('profiles') // Changed from active_donors view to base table for consistency with AdminService
         .select('*', { count: 'exact', head: true })
+        .eq('is_verified', true)
         .eq('role', 'donor');
     
     if (error) {
