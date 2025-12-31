@@ -45,7 +45,7 @@ export const FOUNDERS: TeamMember[] = [
     study: "CSE Department, 2nd Batch (Phoenix'24)",
     institution: "Daffodil International College, Baburhat",
     role: "Contact Admin",
-    image: "/FoundingTeam/Prantik.png",
+    image: "/FoundingTeam/prantik.png",
     quote: "রক্তদানের জন্য বড় মনের প্রয়োজন হয়। আসুন আমরা সবাই মিলে এমন একটি সমাজ গড়ি যেখানে কেউ আর রক্তের অভাবে মারা যাবে না।"
   },
   {
@@ -61,7 +61,7 @@ export const FOUNDERS: TeamMember[] = [
     study: "CSE Department, 2nd Batch (Phoenix'24)",
     institution: "Daffodil International College, Baburhat",
     role: "Social Media Manager",
-    image: "/FoundingTeam/Sabrina.png",
+    image: "/FoundingTeam/sabrina.png",
     quote: "আজ আপনি অন্যকে রক্ত দিচ্ছেন, কাল হয়তো আপনার বা আপনার আপনজনের প্রয়োজনে অন্য কেউ এগিয়ে আসবে—এই ভ্রাতৃত্ববোধই রক্তদানের মূল শিক্ষা।"
   },
 ];

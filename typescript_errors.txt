@@ -1,1 +1,0 @@
-src/features/donors/components/DonorMatching.tsx(32,19): error TS2339: Property 'is_verified' does not exist on type 'User'.

@@ -102,12 +102,10 @@ DIC Blood Bank is a community-driven initiative dedicated to bridging the gap be
 ### 👨‍💻 Lead Developer
 
 **Sadi (SadiEncoded)**  
-*Full Stack Engineer & Visionary*
+*Full Stack Developer*
 
 Sadi is the architect behind the DIC Real-Time Network. With a focus on high-performance systems and FAANG-level aesthetics, he has transformed blood donation management into a seamless, lifesaving experience.
 
 [**Follow Sadi on GitHub**](https://github.com/SadiEncoded)
 
 ---
-
-*Crafted with 💖 and Code by SadiEncoded.*
