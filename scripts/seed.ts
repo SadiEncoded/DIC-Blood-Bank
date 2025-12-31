@@ -5,52 +5,125 @@ import { resolve } from 'path';
 // Load .env
 dotenv.config({ path: resolve(process.cwd(), '.env') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = "https://qrbwarjduncwgglandiz.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyYndhcmpkdW5jd2dnbGFuZGl6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjM5Njk1MywiZXhwIjoyMDgxOTcyOTUzfQ.8yMDEnb7PExKgKF2zzql5pEmj3xSAbRQO0euqapND1Y";
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
-const DONORS = [
-  { name: 'রাফি ইসলাম', count: 12, blood: 'O+', lastDonation: '2024-12-01', location: 'Chandpur', age: 28 },
-  { name: 'সানজিদা আক্তার', count: 3, blood: 'A+', lastDonation: '2024-10-15', location: 'Baburhat', age: 24 },
-  { name: 'মেহেদী হাসান', count: 18, blood: 'B+', lastDonation: '2024-11-20', location: 'Chandpur', age: 32 },
-  { name: 'তানভীর আহমেদ', count: 7, blood: 'AB+', lastDonation: '2024-09-05', location: 'Baburhat', age: 29 },
-  { name: 'নুসরাত জাহান', count: 2, blood: 'O-', lastDonation: '2024-08-12', location: 'Chandpur', age: 22 },
-  { name: 'সাকিব মাহমুদ', count: 9, blood: 'A-', lastDonation: '2024-12-10', location: 'Baburhat', age: 30 },
-  { name: 'ইমরান হোসেন', count: 5, blood: 'B-', lastDonation: '2024-07-18', location: 'Chandpur', age: 26 },
-  { name: 'ফারহানা ইয়াসমিন', count: 14, blood: 'AB-', lastDonation: '2024-11-02', location: 'Baburhat', age: 27 },
-  { name: 'আরিফুল ইসলাম', count: 6, blood: 'O+', lastDonation: '2024-10-01', location: 'Chandpur', age: 31 },
-  { name: 'মাহমুদা আক্তার', count: 1, blood: 'A+', lastDonation: '2024-06-30', location: 'Baburhat', age: 23 },
-  { name: 'সাজিদ খান', count: 4, blood: 'B+', lastDonation: '2024-09-10', location: 'Chandpur', age: 25 },
-  { name: 'রিমি আক্তার', count: 8, blood: 'O+', lastDonation: '2024-10-21', location: 'Baburhat', age: 28 },
-  { name: 'নাঈম রহমান', count: 15, blood: 'A+', lastDonation: '2024-11-11', location: 'Chandpur', age: 33 },
-  { name: 'তামান্না হক', count: 2, blood: 'AB+', lastDonation: '2024-08-05', location: 'Baburhat', age: 21 },
-  { name: 'রিদওয়ান কবির', count: 20, blood: 'O-', lastDonation: '2024-12-05', location: 'Chandpur', age: 35 },
+const SEED_DATA = [
+  {
+    donor: {
+      full_name: 'রাফি ইসলাম',
+      email: 'rafi.islam@example.com',
+      phone_number: '01711111111',
+      blood_type: 'O+',
+      location: 'Chandpur',
+      age: 28,
+      donation_count: 12,
+      last_donation: '2024-12-01',
+      is_verified: true,
+    },
+    story: {
+      title: 'A Gift of Life on a Rainy Night',
+      subtitle: 'How a midnight call saved a newborn',
+      content: 'It was 2 AM when I received the call. A newborn baby at Chandpur Sadar Hospital needed O+ blood urgently. Despite the heavy rain, I knew I had to go. Seeing the relief on the father’s face after the transfusion was the best reward I could ever imagine. Blood donation isn’t just about giving blood; it’s about giving hope.',
+      category: 'Emergency Response',
+      read_time: '4 min read',
+      color_theme: 'rose',
+      is_featured: true,
+    }
+  },
+  {
+    donor: {
+      full_name: 'সানজিদা আক্তার',
+      email: 'sanjida.akter@example.com',
+      phone_number: '01722222222',
+      blood_type: 'A+',
+      location: 'Baburhat',
+      age: 24,
+      donation_count: 3,
+      last_donation: '2024-10-15',
+      is_verified: true,
+    },
+    story: {
+      title: 'Crossing the Fear of Needles',
+      subtitle: 'My journey to becoming a regular donor',
+      content: 'I used to be terrified of needles. But after seeing my grandmother struggle to find blood during her surgery, I realized my fear was nothing compared to the pain of losing a loved one. I donated for the first time that day, and now I am a regular donor. It’s a small step for me, but a giant leap for someone in need.',
+      category: 'Personal Journey',
+      read_time: '3 min read',
+      color_theme: 'blue',
+      is_featured: true,
+    }
+  },
+  {
+    donor: {
+      full_name: 'মেহেদী হাসান',
+      email: 'mehedi.hasan@example.com',
+      phone_number: '01733333333',
+      blood_type: 'B+',
+      location: 'Chandpur',
+      age: 32,
+      donation_count: 18,
+      last_donation: '2024-11-20',
+      is_verified: true,
+    },
+    story: {
+      title: '18 Times and Counting',
+      subtitle: 'Why I never miss a donation cycle',
+      content: 'I started donating blood when I was in university. Since then, I’ve donated 18 times. To me, it’s a responsibility as a healthy human being. Every time I donate, I feel lighter and happier. Our blood is a resource that regenerates, but for some, it’s a resource they can’t live without.',
+      category: 'Community Impact',
+      read_time: '5 min read',
+      color_theme: 'purple',
+      is_featured: true,
+    }
+  }
 ];
 
 async function seed() {
-  console.log('Seeding donors...');
-  
-  for (const donor of DONORS) {
-    const { error } = await supabase.from('donors').upsert({
-      name: donor.name,
-      blood_type: donor.blood,
-      location: donor.location,
-      age: donor.age,
-      donation_count: donor.count,
-      last_donation: donor.lastDonation,
-      phone: `017000000${Math.floor(Math.random() * 100).toString().padStart(2, '0')}`, // Mocking phone for uniqueness
-      is_verified: true,
-    }, { onConflict: 'phone' });
+  console.log('🚀 Starting Seeding Process...');
+
+  for (const item of SEED_DATA) {
+    console.log(`\n👤 Seeding Donor: ${item.donor.full_name}`);
     
-    if (error) {
-      console.error(`Error seeding ${donor.name}:`, error.message);
+    // 1. Seed Profile
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .upsert(item.donor, { onConflict: 'email' })
+      .select()
+      .single();
+
+    if (profileError) {
+      console.error(`❌ Profile Error for ${item.donor.full_name}:`, profileError.message);
+      continue;
+    }
+
+    console.log(`✅ Profile Seeded (ID: ${profileData.id})`);
+
+    // 2. Seed Story
+    const { error: storyError } = await supabase
+      .from('stories')
+      .upsert({
+        ...item.story,
+        donor_id: profileData.id,
+        is_published: true,
+      }, { onConflict: 'title' }); // Using title as a proxy for conflict if ID isn't known
+
+    if (storyError) {
+      console.error(`❌ Story Error for ${item.donor.full_name}:`, storyError.message);
     } else {
-      console.log(`Seeded: ${donor.name}`);
+      console.log(`✅ Story Seeded: ${item.story.title}`);
     }
   }
-  
-  console.log('Done.');
+
+  console.log('\n✨ Seeding Complete!');
 }
 
-seed();
+seed().catch(err => {
+  console.error('CRITICAL SEED ERROR:', err);
+  process.exit(1);
+});

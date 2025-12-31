@@ -28,19 +28,13 @@
     ],
     "paths": {
       "@/*": [
-        "./*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/lib/*": [
-        "./lib/*"
+        "./src/*"
       ],
       "@/types/*": [
-        "./lib/types/*"
+        "./src/types/*"
       ],
       "@/utils/*": [
-        "./lib/utils/*"
+        "./src/utils/*"
       ]
     }
   },
@@ -55,6 +49,8 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "__BACKUP_PRE_REFACTOR",
+    "scripts"
   ]
 }

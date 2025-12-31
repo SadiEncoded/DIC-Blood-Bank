@@ -11,7 +11,10 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'localhost' },
       { protocol: 'https', hostname: 'i.pravatar.cc' },
-      { protocol: 'https', hostname: 'images.unsplash.com' }
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'media.prothomalo.com' },
+      { protocol: 'https', hostname: 'www.redcross.org' },
+      { protocol: 'https', hostname: 'qrbwarjduncwgglandiz.supabase.co' }
     ],
   },
 };
