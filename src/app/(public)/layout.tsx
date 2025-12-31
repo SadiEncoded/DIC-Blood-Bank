@@ -1,3 +1,4 @@
+import Footer from "@/components/common/layout/Footer";
 import Header from "@/components/common/layout/Header";
 import AdminFloatingButton from "@/features/admin/components/AdminFloatingButton";
 import { createClient } from '@/lib/supabase/server';
