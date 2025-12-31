@@ -1,7 +1,8 @@
-import Footer from "@/components/common/layout/Footer";
 import Header from "@/components/common/layout/Header";
 import AdminFloatingButton from "@/features/admin/components/AdminFloatingButton";
 import { createClient } from '@/lib/supabase/server';
+
+export const dynamic = 'force-dynamic';
 
 export default async function PublicLayout({
   children,

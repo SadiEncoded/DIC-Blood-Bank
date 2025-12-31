@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Admin Console | DIC Blood Bank',
   description: 'Manage blood requests, donors, and system content.',
