@@ -5,10 +5,15 @@ import { resolve } from 'path';
 // Load .env
 dotenv.config({ path: resolve(process.cwd(), '.env') });
 
-const supabaseUrl = "https://qrbwarjduncwgglandiz.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyYndhcmpkdW5jd2dnbGFuZGl6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjM5Njk1MywiZXhwIjoyMDgxOTcyOTUzfQ.8yMDEnb7PExKgKF2zzql5pEmj3xSAbRQO0euqapND1Y";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qrbwarjduncwgglandiz.supabase.co";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const supabase = createClient(supabaseUrl, supabaseKey, {
+if (!supabaseKey) {
+  console.error("❌ ERROR: Missing SUPABASE_SERVICE_ROLE_KEY in .env file.");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey as string, {
   auth: {
     autoRefreshToken: false,
     persistSession: false

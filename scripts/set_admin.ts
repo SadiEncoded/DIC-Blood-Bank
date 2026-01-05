@@ -16,8 +16,22 @@ const TARGET_USER_EMAIL = process.argv[2] || "YOUR_EMAIL_HERE";
 // ==========================================
 
 // Using the same credentials as create_event.ts for consistency
-const SUPABASE_URL = "https://qrbwarjduncwgglandiz.supabase.co";
-const SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyYndhcmpkdW5jd2dnbGFuZGl6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjM5Njk1MywiZXhwIjoyMDgxOTcyOTUzfQ.8yMDEnb7PExKgKF2zzql5pEmj3xSAbRQO0euqapND1Y";
+// Using the same credentials as create_event.ts for consistency
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qrbwarjduncwgglandiz.supabase.co";
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SERVICE_KEY) {
+  console.error("❌ ERROR: Missing SUPABASE_SERVICE_ROLE_KEY in .env file.");
+  console.error("   This script requires the Service Role Key to bypass RLS and update user roles.");
+  process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
 async function setAdminRole() {
   console.log('🚀 Initializing Admin Client...');
@@ -35,12 +49,6 @@ async function setAdminRole() {
       return;
   }
 
-  const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  });
 
   console.log(`🔍 Looking for user: ${TARGET_USER_EMAIL}`);
 

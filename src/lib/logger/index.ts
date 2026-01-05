@@ -63,16 +63,16 @@ class Logger {
 
     switch (level) {
       case 'debug':
-        console.debug(formatted, context || '');
+        console.debug('%s', formatted, context || '');
         break;
       case 'info':
-        console.info(formatted, context || '');
+        console.info('%s', formatted, context || '');
         break;
       case 'warn':
-        console.warn(formatted, context || '');
+        console.warn('%s', formatted, context || '');
         break;
       case 'error':
-        console.error(formatted, error || context || '');
+        console.error('%s', formatted, error || context || '');
         break;
     }
 
